@@ -32,7 +32,7 @@ public class TratadorDeErros {
             this(erro.getField(), erro.getDefaultMessage());
         }
         public DadosErroValidacao(ValidacaoException ex) {
-            this("Erro",ex.getMessage());
+            this("Erro de validação",ex.getMessage());
         }
     }
 

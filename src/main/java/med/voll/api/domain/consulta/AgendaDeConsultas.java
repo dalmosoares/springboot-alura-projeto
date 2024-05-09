@@ -1,6 +1,7 @@
 package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.ValidacaoException;
+import med.voll.api.domain.consulta.validacoes.ValidadorHorarioFuncionamentoClinica;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
@@ -19,7 +20,11 @@ public class AgendaDeConsultas {
     @Autowired
     private PacienteRepository pacienteRepository;
 
+    @Autowired
+    private ValidadorHorarioFuncionamentoClinica validadorHorarioFuncionamentoClinica;
+
     public void agendar(DadosAgendamentoConsulta dados) {
+        validadorHorarioFuncionamentoClinica.validar(dados);
         if (!pacienteRepository.existsById(dados.idPaciente())) {
             throw new ValidacaoException("Id do paciente informado não existe!");
         }
