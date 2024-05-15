@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.format.DateTimeParseException;
+
 @RestControllerAdvice
 public class TratadorDeErros {
 
@@ -24,7 +26,7 @@ public class TratadorDeErros {
 
     @ExceptionHandler(ValidacaoException.class)
     public ResponseEntity tratarErroValidacao(ValidacaoException ex) {
-        return ResponseEntity.badRequest().body(new DadosErroValidacao(ex));
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     private record DadosErroValidacao(String campo, String mensagem) {
@@ -34,6 +36,11 @@ public class TratadorDeErros {
         public DadosErroValidacao(ValidacaoException ex) {
             this("Erro de validação",ex.getMessage());
         }
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity tratarErroDataInvalida(DateTimeParseException ex){
+        return ResponseEntity.badRequest().body(new DadosErroValidacao("Erro","Data Inválida"));
     }
 
 }

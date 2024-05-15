@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
+    List<Medico> findAllByAtivoTrue();
+
     Page<Medico> findAllByAtivoTrue(Pageable paginacao);
 
     @Query("""
@@ -26,4 +29,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
                 limit 1
                 """)
     Medico escolherMedicoAleatorioLivreNaData(Especialidade especialidade, LocalDateTime data);
+
+    @Query("select m.ativo from Medico m where m.id = :idMedico")
+    Boolean findAtivoByID(Long idMedico);
 }
